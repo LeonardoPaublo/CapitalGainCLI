@@ -1,28 +1,37 @@
 using CapitalGain.Domain.Entities;
 using CapitalGain.Domain.Enums;
 using CapitalGain.Domain.Services;
+using CapitalGain.Domain.Settings;
+using Microsoft.Extensions.Options;
 
 namespace CapitalGain.Application.Services;
 
 public class CapitalGainCalculator : ICapitalGainCalculator
 {
-    private decimal averageCost = 0;
-    private int totalQuantity = 0;
-    private decimal accumulatedLoss = 0;
+    private readonly TaxSettings _settings;
 
-    public List<Dictionary<string, decimal>> ProcessOperations(List<Operation> operations)
+    public CapitalGainCalculator(IOptions<TaxSettings> options)
     {
-        var result = new List<Dictionary<string, decimal>>();
+        _settings = options.Value;
+    }
 
-        foreach (var op in operations)
+    public List<TaxResult> ProcessOperations(List<Operation> operations)
+    {
+        List<TaxResult> result = new();
+
+        decimal averageCost = 0;
+        int totalQuantity = 0;
+        decimal accumulatedLoss = 0;
+
+        foreach (Operation op in operations)
         {
             if (op.OperationType == OperationType.Buy)
             {
                 decimal totalCost = averageCost * totalQuantity + op.UnitCost * op.Quantity;
                 totalQuantity += op.Quantity;
-                averageCost = totalQuantity == 0 ? 0 : totalCost / totalQuantity;
+                averageCost = (totalQuantity == 0 ? 0 : totalCost) / totalQuantity;
 
-                result.Add(new Dictionary<string, decimal> { { "tax", 0.0m } });
+                result.Add(new TaxResult { Tax = 0.0m });
             }
             else if (op.OperationType == OperationType.Sell)
             {
@@ -47,14 +56,14 @@ public class CapitalGainCalculator : ICapitalGainCalculator
                         accumulatedLoss -= deduction;
                     }
 
-                    if (totalSellValue > 20000.00m && adjustedProfit > 0)
+                    if (totalSellValue > _settings.TaxExemptionThreshold && adjustedProfit > 0)
                     {
-                        tax = adjustedProfit * 0.2m;
+                        tax = adjustedProfit * _settings.TaxRate;
                     }
                 }
 
                 totalQuantity -= op.Quantity;
-                result.Add(new Dictionary<string, decimal> { { "tax", Math.Round(tax, 2) } });
+                result.Add(new TaxResult { Tax = Math.Round(tax, 2) });
             }
         }
 

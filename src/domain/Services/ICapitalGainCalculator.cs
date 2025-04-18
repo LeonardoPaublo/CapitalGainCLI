@@ -4,5 +4,5 @@ namespace CapitalGain.Domain.Services;
 
 public interface ICapitalGainCalculator
 {
-    List<Dictionary<string, decimal>> ProcessOperations(List<Operation> operations);
+    List<TaxResult> ProcessOperations(List<Operation> operations);
 }
