@@ -33,7 +33,7 @@ CapitalGainCLI/
 │   │       └── Settings
 │   │           └── TaxSettings.cs
 │   ├── CapitalGainCLI.csproj
-│   ├── Program.cs
+│   └── Program.cs
 ├── tests/
 │   └── CapitalGainCLI.Tests/
 │       ├── CapitalGainCLI.Tests.csproj
