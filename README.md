@@ -19,25 +19,25 @@ CapitalGainCLI/
 ├── src/
 │   ├── application/
 │   │   ├── Extensions/
-│   │   |   └── OperationExtensions.cs
+│   │   │   └── OperationExtensions.cs
 │   │   └── Services/
 │   │       └── CapitalGainCalculator.cs
 │   ├── domain/
-│   │   |   ├── Entities
-│   │   |   |   ├── Operations.cs
-│   │   |   |   └── TaxResult.cs
-│   │   |   ├── Enums
-│   │   |   |   └── OperationType.cs
-│   │   |   ├── Services
-│   │   |   |   └── ICapitalGainCalculator.cs
-│   │   |   └── Settings
-│   │   |       └── TaxSettings.cs
+│   │       ├── Entities
+│   │       │   ├── Operations.cs
+│   │       │   └── TaxResult.cs
+│   │       ├── Enums
+│   │       │   └── OperationType.cs
+│   │       ├── Services
+│   │       │   └── ICapitalGainCalculator.cs
+│   │       └── Settings
+│   │           └── TaxSettings.cs
 │   ├── CapitalGainCLI.csproj
 │   ├── Program.cs
 ├── tests/
-│   ├── CapitalGainCLI.Tests/
-│   │   ├── CapitalGainCLI.Tests.csproj
-│   │   └── CapitalGainCalculatorTests.cs
+│   └── CapitalGainCLI.Tests/
+│       ├── CapitalGainCLI.Tests.csproj
+│       └── CapitalGainCalculatorTests.cs
 ├── .gitignore
 ├── CapitalGainCLI.sln
 └── README.md
