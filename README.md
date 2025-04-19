@@ -16,8 +16,8 @@ CapitalGainCLI is a command-line application designed to calculate capital gains
 ## Project Structure
 ```
 CapitalGainCLI/
-├── .github
-│   └── workflows
+├── .github/
+│   └── workflows/
 │      └── capitalgaincli-ci.yml
 ├── src/
 │   ├── application/
