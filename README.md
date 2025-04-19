@@ -19,7 +19,7 @@ CapitalGainCLI/
 ├── src/
 │   ├── application/
 │   │   ├── Extensions/
-│   │       └── OperationExtensions.cs
+│   │   |   └── OperationExtensions.cs
 │   │   └── Services/
 │   │       └── CapitalGainCalculator.cs
 │   ├── domain/
