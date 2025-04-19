@@ -1,5 +1,6 @@
 using CapitalGain.Domain.Entities;
 using CapitalGain.Domain.Enums;
+using CapitalGain.Application.Extensions;
 using CapitalGain.Domain.Services;
 using CapitalGain.Domain.Settings;
 using Microsoft.Extensions.Options;
@@ -17,6 +18,8 @@ public class CapitalGainCalculator : ICapitalGainCalculator
 
     public List<TaxResult> ProcessOperations(List<Operation> operations)
     {
+        ValidateOperations(operations);
+
         List<TaxResult> result = new();
 
         decimal averageCost = 0;
@@ -68,5 +71,37 @@ public class CapitalGainCalculator : ICapitalGainCalculator
         }
 
         return result;
+    }
+
+    private void ValidateOperations(List<Operation> operations)
+    {
+        if (operations.IsEmpty())
+        {
+            return;
+        }
+
+        int totalQuantity = 0;
+
+        foreach (var op in operations)
+        {
+            if (!op.IsValid())
+            {
+                throw new ArgumentException("One or more operations contain invalid Quantity or UnitCost.");
+            }
+
+            if (op.IsSellExceedingAvailableQuantity(totalQuantity))
+            {
+                throw new InvalidOperationException("One or more sell operations exceed available quantity.");
+            }
+
+            if (op.OperationType == OperationType.Buy)
+            {
+                totalQuantity += op.Quantity;
+            }
+            else if (op.OperationType == OperationType.Sell)
+            {
+                totalQuantity -= op.Quantity;
+            }
+        }
     }
 }

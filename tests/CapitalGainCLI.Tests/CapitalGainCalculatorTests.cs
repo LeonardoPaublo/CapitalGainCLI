@@ -148,4 +148,63 @@ public class CapitalGainCalculatorTests
         Assert.Equal(7500.0m, results[1].Tax); // 15% on R$50,000 profit (higher than the R$10,000 limit)
         Assert.Equal(0.0m, results[2].Tax); // Sell = no tax (loss)
     }
+
+    [Fact]
+    public void Should_Throw_Exception_When_Operations_List_Is_Empty()
+    {
+        // Arrange
+        TaxSettings taxSettings = new TaxSettings { TaxExemptionThreshold = 20000.00m, TaxRate = 0.2m };
+        IOptions<TaxSettings> options = Options.Create(taxSettings);
+        CapitalGainCalculator calculator = new CapitalGainCalculator(options);
+
+        List<Operation> operations = new List<Operation>();
+
+        // Act
+        List<TaxResult> result = calculator.ProcessOperations(operations);
+
+        Console.WriteLine("Result: " + result.Count);
+
+        // Assert
+        Assert.Empty(result); // Should return an empty list without throwing an exception
+    }
+
+    [Fact]
+    public void Should_Throw_Exception_When_Operation_Has_Invalid_Quantity_Or_UnitCost()
+    {
+        // Arrange
+        TaxSettings taxSettings = new TaxSettings { TaxExemptionThreshold = 20000.00m, TaxRate = 0.2m };
+        IOptions<TaxSettings> options = Options.Create(taxSettings);
+        CapitalGainCalculator calculator = new CapitalGainCalculator(options);
+
+        List<Operation> operations = new List<Operation>
+        {
+            new Operation { OperationType = OperationType.Buy, UnitCost = -10.00m, Quantity = 100 }, // Invalid UnitCost
+            new Operation { OperationType = OperationType.Sell, UnitCost = 20.00m, Quantity = -50 }  // Invalid Quantity
+        };
+
+        // Act & Assert
+        ArgumentException exception = Assert.Throws<ArgumentException>(() => calculator.ProcessOperations(operations));
+        Assert.Equal("One or more operations contain invalid Quantity or UnitCost.", exception.Message);
+    }
+
+    [Fact]
+    public void Should_Throw_Exception_When_Sell_Exceeds_Available_Quantity()
+    {
+        // Arrange
+        TaxSettings taxSettings = new TaxSettings { TaxExemptionThreshold = 20000.00m, TaxRate = 0.2m };
+        IOptions<TaxSettings> options = Options.Create(taxSettings);
+        CapitalGainCalculator calculator = new CapitalGainCalculator(options);
+
+        List<Operation> operations = new List<Operation>
+        {
+            new Operation { OperationType = OperationType.Buy, UnitCost = 10.00m, Quantity = 100 },
+            new Operation { OperationType = OperationType.Sell, UnitCost = 20.00m, Quantity = 150 } // Exceeds available quantity
+        };
+
+        // Act
+        InvalidOperationException exception = Assert.Throws<InvalidOperationException>(() => calculator.ProcessOperations(operations));
+
+        // Assert
+        Assert.Equal("One or more sell operations exceed available quantity.", exception.Message);
+    }
 }
