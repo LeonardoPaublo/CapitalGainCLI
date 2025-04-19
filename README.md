@@ -55,7 +55,7 @@ CapitalGainCLI/
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/CapitalGainCLI.git
+   git clone https://github.com/LeonardoPaublo/CapitalGainCLI.git
    cd CapitalGainCLI
    ```
 2. Run the application:
