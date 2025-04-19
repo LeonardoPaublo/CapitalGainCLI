@@ -16,6 +16,9 @@ CapitalGainCLI is a command-line application designed to calculate capital gains
 ## Project Structure
 ```
 CapitalGainCLI/
+├── .github
+│   └── workflows
+│      └── capitalgaincli-ci.yml
 ├── src/
 │   ├── application/
 │   │   ├── Extensions/
@@ -87,6 +90,28 @@ CapitalGainCLI/
 ## Configuration
 
 The application uses the ```TaxSettings``` class to configure tax rules:
-- *TaxExemptionThreshold*: The minimum profit required before taxes are applied.
-- *TaxRate*: The percentage of profit to be taxed.
+- **TaxExemptionThreshold**: The minimum profit required before taxes are applied.
+- **TaxRate**: The percentage of profit to be taxed.
 You can modify these settings in the ```ConfigureServices``` method in ```Program.cs``` or directly in the test cases.
+
+---
+
+## Continuous Integration (CI)
+
+This project uses GitHub Actions for Continuous Integration (CI) to ensure code quality and reliability. The CI pipeline is triggered automatically on the following events:
+- **Pushes** to the main branch.
+- **Pull Requests** targeting the main branch.
+
+The CI pipeline performs the following steps:
+- **Checkout Code**: Clones the repository to the CI environment.
+- **Setup .NET**: Installs the required .NET SDK version (9.0.x).
+- **Restore Dependencies**: Restores all NuGet dependencies.
+- **Build**: Builds the project to ensure there are no compilation errors.
+- **Test**: Runs all unit tests to validate the functionality of the code.
+
+---
+
+### CI Status Badge
+
+![Build and Test](https://github.com/LeonardoPaublo/CapitalGainCLI/actions/workflows/capitalgaincli-ci.yml/badge.svg)
+
