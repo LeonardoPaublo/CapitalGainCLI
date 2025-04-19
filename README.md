@@ -18,6 +18,8 @@ CapitalGainCLI is a command-line application designed to calculate capital gains
 CapitalGainCLI/
 ├── src/
 │   ├── application/
+│   │   ├── Extensions/
+│   │       └── OperationExtensions.cs
 │   │   └── Services/
 │   │       └── CapitalGainCalculator.cs
 │   ├── domain/
